@@ -18,20 +18,34 @@ async function initContract() {
 
 // Wallet connection
 document.getElementById('connectWallet').addEventListener('click', async () => {
-    if (window.ethereum) {
-        try {
-            await window.ethereum.request({ method: 'eth_requestAccounts' });
-            await initContract();
-            document.getElementById('walletAddress').textContent = `Connected: ${userAddress.slice(0, 6)}...${userAddress.slice(-4)}`;
-            document.getElementById('walletAddress').classList.remove('hidden');
-            document.getElementById('connectWallet').classList.add('hidden');
-            document.getElementById('notConnectedWarning').classList.add('hidden');
-            checkAdmin();
-        } catch (error) {
+    if (!window.ethereum) {
+        // If MetaMask is not installed
+        showNotification('Error', 'MetaMask is not installed! Please install MetaMask to connect your wallet.');
+        return;
+    }
+
+    try {
+        // Request account access, which opens MetaMask
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        if (accounts.length === 0) {
+            showNotification('Error', 'No accounts found. Please connect an account in MetaMask.');
+            return;
+        }
+
+        await initContract();
+        document.getElementById('walletAddress').textContent = `Connected: ${userAddress.slice(0, 6)}...${userAddress.slice(-4)}`;
+        document.getElementById('walletAddress').classList.remove('hidden');
+        document.getElementById('connectWallet').classList.add('hidden');
+        document.getElementById('notConnectedWarning').classList.add('hidden');
+        showNotification('Success', 'Wallet connected successfully!');
+        checkAdmin();
+    } catch (error) {
+        if (error.code === 4001) {
+            // User rejected the request
+            showNotification('Error', 'You rejected the connection request in MetaMask.');
+        } else {
             showNotification('Error', 'Failed to connect wallet: ' + error.message);
         }
-    } else {
-        showNotification('Error', 'Please install MetaMask!');
     }
 });
 
@@ -259,9 +273,18 @@ async function loadPastRounds() {
 // Initial load
 if (window.ethereum) {
     window.ethereum.on('accountsChanged', () => location.reload());
-    initContract().then(() => {
-        loadPastRounds();
+    // Check if already connected
+    window.ethereum.request({ method: 'eth_accounts' }).then(accounts => {
+        if (accounts.length > 0) {
+            initContract().then(() => {
+                document.getElementById('walletAddress').textContent = `Connected: ${userAddress.slice(0, 6)}...${userAddress.slice(-4)}`;
+                document.getElementById('walletAddress').classList.remove('hidden');
+                document.getElementById('connectWallet').classList.add('hidden');
+                loadPastRounds();
+            });
+        }
     });
 } else {
     document.getElementById('notConnectedWarning').classList.remove('hidden');
+    document.getElementById('notConnectedWarning').textContent = 'MetaMask is not installed. Please install MetaMask to participate in the drawing contest.';
 }
