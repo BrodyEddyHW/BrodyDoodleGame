@@ -1,0 +1,240 @@
+[
+    {
+      "type": "event",
+      "name": "NewRound",
+      "inputs": [
+        {"name": "roundId", "type": "uint256", "components": null, "internalType": null, "indexed": false},
+        {"name": "prompt", "type": "string", "components": null, "internalType": null, "indexed": false}
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "NewDrawing",
+      "inputs": [
+        {"name": "roundId", "type": "uint256", "components": null, "internalType": null, "indexed": false},
+        {"name": "artist", "type": "address", "components": null, "internalType": null, "indexed": false},
+        {"name": "imageURL", "type": "string", "components": null, "internalType": null, "indexed": false}
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "NewVote",
+      "inputs": [
+        {"name": "roundId", "type": "uint256", "components": null, "internalType": null, "indexed": false},
+        {"name": "artist", "type": "address", "components": null, "internalType": null, "indexed": false},
+        {"name": "voter", "type": "address", "components": null, "internalType": null, "indexed": false},
+        {"name": "score", "type": "uint256", "components": null, "internalType": null, "indexed": false}
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "RoundEnded",
+      "inputs": [
+        {"name": "roundId", "type": "uint256", "components": null, "internalType": null, "indexed": false},
+        {"name": "winner", "type": "address", "components": null, "internalType": null, "indexed": false},
+        {"name": "reward", "type": "uint256", "components": null, "internalType": null, "indexed": false}
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "constructor",
+      "stateMutability": "nonpayable",
+      "inputs": []
+    },
+    {
+      "type": "function",
+      "name": "startNewRound",
+      "stateMutability": "nonpayable",
+      "inputs": [
+        {"name": "prompt", "type": "string", "components": null, "internalType": null},
+        {"name": "durationInMinutes", "type": "uint256", "components": null, "internalType": null},
+        {"name": "entryFee", "type": "uint256", "components": null, "internalType": null}
+      ],
+      "outputs": []
+    },
+    {
+      "type": "function",
+      "name": "submitDrawing",
+      "stateMutability": "payable",
+      "inputs": [
+        {"name": "imageURL", "type": "string", "components": null, "internalType": null}
+      ],
+      "outputs": []
+    },
+    {
+      "type": "function",
+      "name": "voteOnDrawing",
+      "stateMutability": "nonpayable",
+      "inputs": [
+        {"name": "artist", "type": "address", "components": null, "internalType": null},
+        {"name": "score", "type": "uint8", "components": null, "internalType": null}
+      ],
+      "outputs": []
+    },
+    {
+      "type": "function",
+      "name": "endRound",
+      "stateMutability": "nonpayable",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "type": "function",
+      "name": "getDrawingsForRound",
+      "stateMutability": "view",
+      "inputs": [
+        {"name": "roundId", "type": "uint256", "components": null, "internalType": null}
+      ],
+      "outputs": [
+        {"name": "", "type": "address[]", "components": null, "internalType": null}
+      ]
+    },
+    {
+      "type": "function",
+      "name": "getDrawingDetails",
+      "stateMutability": "view",
+      "inputs": [
+        {"name": "roundId", "type": "uint256", "components": null, "internalType": null},
+        {"name": "artist", "type": "address", "components": null, "internalType": null}
+      ],
+      "outputs": [
+        {"name": "", "type": "string", "components": null, "internalType": null},
+        {"name": "", "type": "string", "components": null, "internalType": null},
+        {"name": "", "type": "uint256", "components": null, "internalType": null},
+        {"name": "", "type": "uint256", "components": null, "internalType": null}
+      ]
+    },
+    {
+      "type": "function",
+      "name": "getCurrentPrompt",
+      "stateMutability": "view",
+      "inputs": [],
+      "outputs": [
+        {"name": "", "type": "string", "components": null, "internalType": null}
+      ]
+    },
+    {
+      "type": "function",
+      "name": "getRoundInfo",
+      "stateMutability": "view",
+      "inputs": [
+        {"name": "roundId", "type": "uint256", "components": null, "internalType": null}
+      ],
+      "outputs": [
+        {"name": "", "type": "string", "components": null, "internalType": null},
+        {"name": "", "type": "uint256", "components": null, "internalType": null},
+        {"name": "", "type": "uint256", "components": null, "internalType": null},
+        {"name": "", "type": "bool", "components": null, "internalType": null},
+        {"name": "", "type": "uint256", "components": null, "internalType": null}
+      ]
+    },
+    {
+      "type": "function",
+      "name": "withdraw",
+      "stateMutability": "nonpayable",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "type": "function",
+      "name": "owner",
+      "stateMutability": "view",
+      "inputs": [],
+      "outputs": [
+        {"name": "", "type": "address", "components": null, "internalType": null}
+      ]
+    },
+    {
+      "type": "function",
+      "name": "currentRound",
+      "stateMutability": "view",
+      "inputs": [],
+      "outputs": [
+        {"name": "", "type": "uint256", "components": null, "internalType": null}
+      ]
+    },
+    {
+      "type": "function",
+      "name": "minEntryFee",
+      "stateMutability": "view",
+      "inputs": [],
+      "outputs": [
+        {"name": "", "type": "uint256", "components": null, "internalType": null}
+      ]
+    },
+    {
+      "type": "function",
+      "name": "rounds",
+      "stateMutability": "view",
+      "inputs": [
+        {"name": "arg0", "type": "uint256", "components": null, "internalType": null}
+      ],
+      "outputs": [
+        {
+          "name": "",
+          "type": "tuple",
+          "components": [
+            {"name": "prompt", "type": "string", "components": null, "internalType": null},
+            {"name": "startTime", "type": "uint256", "components": null, "internalType": null},
+            {"name": "endTime", "type": "uint256", "components": null, "internalType": null},
+            {"name": "active", "type": "bool", "components": null, "internalType": null},
+            {"name": "entryFee", "type": "uint256", "components": null, "internalType": null}
+          ],
+          "internalType": null
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "drawings",
+      "stateMutability": "view",
+      "inputs": [
+        {"name": "arg0", "type": "uint256", "components": null, "internalType": null},
+        {"name": "arg1", "type": "address", "components": null, "internalType": null}
+      ],
+      "outputs": [
+        {
+          "name": "",
+          "type": "tuple",
+          "components": [
+            {"name": "artist", "type": "address", "components": null, "internalType": null},
+            {"name": "imageURL", "type": "string", "components": null, "internalType": null},
+            {"name": "prompt", "type": "string", "components": null, "internalType": null},
+            {"name": "totalScore", "type": "uint256", "components": null, "internalType": null},
+            {"name": "voterCount", "type": "uint256", "components": null, "internalType": null},
+            {"name": "exists", "type": "bool", "components": null, "internalType": null},
+            {"name": "submissionTime", "type": "uint256", "components": null, "internalType": null}
+          ],
+          "internalType": null
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "roundParticipants",
+      "stateMutability": "view",
+      "inputs": [
+        {"name": "arg0", "type": "uint256", "components": null, "internalType": null},
+        {"name": "arg1", "type": "uint256", "components": null, "internalType": null}
+      ],
+      "outputs": [
+        {"name": "", "type": "address", "components": null, "internalType": null}
+      ]
+    },
+    {
+      "type": "function",
+      "name": "hasVoted",
+      "stateMutability": "view",
+      "inputs": [
+        {"name": "arg0", "type": "uint256", "components": null, "internalType": null},
+        {"name": "arg1", "type": "address", "components": null, "internalType": null},
+        {"name": "arg2", "type": "address", "components": null, "internalType": null}
+      ],
+      "outputs": [
+        {"name": "", "type": "bool", "components": null, "internalType": null}
+      ]
+    }
+  ]
