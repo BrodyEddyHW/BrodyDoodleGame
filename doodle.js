@@ -1,10 +1,11 @@
-const CONTRACT_ADDRESS = "0x2c96382A2f78500aD5cE12BB075a3eb3ac9AA679"; // Update with your new address
+const CONTRACT_ADDRESS = "0xd29Bc5078957CcBF683a13aF8a104a246b29206B"; // Replace with your new deployed address
 const provider = new ethers.providers.Web3Provider(window.ethereum);
 let signer;
 let contract;
 let userAddress;
 
-const ABI = [{"type":"event","name":"NewRound","inputs":[{"name":"roundId","type":"uint256","components":null,"internalType":null,"indexed":false},{"name":"prompt","type":"string","components":null,"internalType":null,"indexed":false}],"anonymous":false},{"type":"event","name":"NewDrawing","inputs":[{"name":"roundId","type":"uint256","components":null,"internalType":null,"indexed":false},{"name":"artist","type":"address","components":null,"internalType":null,"indexed":false},{"name":"imageURL","type":"string","components":null,"internalType":null,"indexed":false}],"anonymous":false},{"type":"event","name":"NewVote","inputs":[{"name":"roundId","type":"uint256","components":null,"internalType":null,"indexed":false},{"name":"artist","type":"address","components":null,"internalType":null,"indexed":false},{"name":"voter","type":"address","components":null,"internalType":null,"indexed":false},{"name":"score","type":"uint256","components":null,"internalType":null,"indexed":false}],"anonymous":false},{"type":"event","name":"RoundEnded","inputs":[{"name":"roundId","type":"uint256","components":null,"internalType":null,"indexed":false},{"name":"winner","type":"address","components":null,"internalType":null,"indexed":false},{"name":"reward","type":"uint256","components":null,"internalType":null,"indexed":false}],"anonymous":false},{"type":"function","name":"addPrompt","stateMutability":"nonpayable","inputs":[{"name":"_prompt","type":"string","components":null,"internalType":null}],"outputs":[]},{"type":"constructor","stateMutability":"nonpayable","inputs":[]},{"type":"function","name":"startNewRound","stateMutability":"nonpayable","inputs":[{"name":"durationInMinutes","type":"uint256","components":null,"internalType":null},{"name":"entryFee","type":"uint256","components":null,"internalType":null}],"outputs":[]},{"type":"function","name":"submitDrawing","stateMutability":"payable","inputs":[{"name":"imageURL","type":"string","components":null,"internalType":null}],"outputs":[]},{"type":"function","name":"voteOnDrawing","stateMutability":"nonpayable","inputs":[{"name":"artist","type":"address","components":null,"internalType":null},{"name":"score","type":"uint8","components":null,"internalType":null}],"outputs":[]},{"type":"function","name":"endRound","stateMutability":"nonpayable","inputs":[],"outputs":[]},{"type":"function","name":"getDrawingsForRound","stateMutability":"view","inputs":[{"name":"roundId","type":"uint256","components":null,"internalType":null}],"outputs":[{"name":"","type":"address[]","components":null,"internalType":null}]},{"type":"function","name":"getDrawingDetails","stateMutability":"view","inputs":[{"name":"roundId","type":"uint256","components":null,"internalType":null},{"name":"artist","type":"address","components":null,"internalType":null}],"outputs":[{"name":"","type":"string","components":null,"internalType":null},{"name":"","type":"string","components":null,"internalType":null},{"name":"","type":"uint256","components":null,"internalType":null},{"name":"","type":"uint256","components":null,"internalType":null}]},{"type":"function","name":"getCurrentPrompt","stateMutability":"view","inputs":[],"outputs":[{"name":"","type":"string","components":null,"internalType":null}]},{"type":"function","name":"getRoundInfo","stateMutability":"view","inputs":[{"name":"roundId","type":"uint256","components":null,"internalType":null}],"outputs":[{"name":"","type":"string","components":null,"internalType":null},{"name":"","type":"uint256","components":null,"internalType":null},{"name":"","type":"uint256","components":null,"internalType":null},{"name":"","type":"bool","components":null,"internalType":null},{"name":"","type":"uint256","components":null,"internalType":null}]},{"type":"function","name":"withdraw","stateMutability":"nonpayable","inputs":[],"outputs":[]},{"type":"function","name":"owner","stateMutability":"view","inputs":[],"outputs":[{"name":"","type":"address","components":null,"internalType":null}]},{"type":"function","name":"currentRound","stateMutability":"view","inputs":[],"outputs":[{"name":"","type":"uint256","components":null,"internalType":null}]},{"type":"function","name":"minEntryFee","stateMutability":"view","inputs":[],"outputs":[{"name":"","type":"uint256","components":null,"internalType":null}]},{"type":"function","name":"rounds","stateMutability":"view","inputs":[{"name":"arg0","type":"uint256","components":null,"internalType":null}],"outputs":[{"name":"","type":"tuple","components":[{"name":"prompt","type":"string","components":null,"internalType":null},{"name":"startTime","type":"uint256","components":null,"internalType":null},{"name":"endTime","type":"uint256","components":null,"internalType":null},{"name":"active","type":"bool","components":null,"internalType":null},{"name":"entryFee","type":"uint256","components":null,"internalType":null}],"internalType":null}]},{"type":"function","name":"drawings","stateMutability":"view","inputs":[{"name":"arg0","type":"uint256","components":null,"internalType":null},{"name":"arg1","type":"address","components":null,"internalType":null}],"outputs":[{"name":"","type":"tuple","components":[{"name":"artist","type":"address","components":null,"internalType":null},{"name":"imageURL","type":"string","components":null,"internalType":null},{"name":"prompt","type":"string","components":null,"internalType":null},{"name":"totalScore","type":"uint256","components":null,"internalType":null},{"name":"voterCount","type":"uint256","components":null,"internalType":null},{"name":"exists","type":"bool","components":null,"internalType":null},{"name":"submissionTime","type":"uint256","components":null,"internalType":null}],"internalType":null}]},{"type":"function","name":"roundParticipants","stateMutability":"view","inputs":[{"name":"arg0","type":"uint256","components":null,"internalType":null},{"name":"arg1","type":"uint256","components":null,"internalType":null}],"outputs":[{"name":"","type":"address","components":null,"internalType":null}]},{"type":"function","name":"hasVoted","stateMutability":"view","inputs":[{"name":"arg0","type":"uint256","components":null,"internalType":null},{"name":"arg1","type":"address","components":null,"internalType":null},{"name":"arg2","type":"address","components":null,"internalType":null}],"outputs":[{"name":"","type":"bool","components":null,"internalType":null}]},{"type":"function","name":"promptCount","stateMutability":"view","inputs":[],"outputs":[{"name":"","type":"uint256","components":null,"internalType":null}]},{"type":"function","name":"prompts","stateMutability":"view","inputs":[{"name":"arg0","type":"uint256","components":null,"internalType":null}],"outputs":[{"name":"","type":"string","components":null,"internalType":null}]}];
+// Update ABI after redeploying the contract in Remix
+const ABI = [{"type":"event","name":"NewRound","inputs":[{"name":"roundId","type":"uint256","components":null,"internalType":null,"indexed":false},{"name":"prompt","type":"string","components":null,"internalType":null,"indexed":false}],"anonymous":false},{"type":"event","name":"NewDrawing","inputs":[{"name":"roundId","type":"uint256","components":null,"internalType":null,"indexed":false},{"name":"artist","type":"address","components":null,"internalType":null,"indexed":false},{"name":"imageURL","type":"string","components":null,"internalType":null,"indexed":false}],"anonymous":false},{"type":"event","name":"NewVote","inputs":[{"name":"roundId","type":"uint256","components":null,"internalType":null,"indexed":false},{"name":"artist","type":"address","components":null,"internalType":null,"indexed":false},{"name":"voter","type":"address","components":null,"internalType":null,"indexed":false},{"name":"score","type":"uint256","components":null,"internalType":null,"indexed":false}],"anonymous":false},{"type":"event","name":"RoundEnded","inputs":[{"name":"roundId","type":"uint256","components":null,"internalType":null,"indexed":false},{"name":"winner","type":"address","components":null,"internalType":null,"indexed":false},{"name":"reward","type":"uint256","components":null,"internalType":null,"indexed":false}],"anonymous":false},{"type":"function","name":"addPrompt","stateMutability":"nonpayable","inputs":[{"name":"_prompt","type":"string","components":null,"internalType":null}],"outputs":[]},{"type":"constructor","stateMutability":"nonpayable","inputs":[]},{"type":"function","name":"submitDrawing","stateMutability":"payable","inputs":[{"name":"imageURL","type":"string","components":null,"internalType":null}],"outputs":[]},{"type":"function","name":"voteOnDrawing","stateMutability":"nonpayable","inputs":[{"name":"artist","type":"address","components":null,"internalType":null},{"name":"score","type":"uint8","components":null,"internalType":null}],"outputs":[]},{"type":"function","name":"getDrawingsForRound","stateMutability":"view","inputs":[{"name":"roundId","type":"uint256","components":null,"internalType":null}],"outputs":[{"name":"","type":"address[]","components":null,"internalType":null}]},{"type":"function","name":"getDrawingDetails","stateMutability":"view","inputs":[{"name":"roundId","type":"uint256","components":null,"internalType":null},{"name":"artist","type":"address","components":null,"internalType":null}],"outputs":[{"name":"","type":"string","components":null,"internalType":null},{"name":"","type":"string","components":null,"internalType":null},{"name":"","type":"uint256","components":null,"internalType":null},{"name":"","type":"uint256","components":null,"internalType":null}]},{"type":"function","name":"getCurrentPrompt","stateMutability":"view","inputs":[],"outputs":[{"name":"","type":"string","components":null,"internalType":null}]},{"type":"function","name":"getRoundInfo","stateMutability":"view","inputs":[{"name":"roundId","type":"uint256","components":null,"internalType":null}],"outputs":[{"name":"","type":"string","components":null,"internalType":null},{"name":"","type":"uint256","components":null,"internalType":null},{"name":"","type":"uint256","components":null,"internalType":null},{"name":"","type":"bool","components":null,"internalType":null},{"name":"","type":"uint256","components":null,"internalType":null}]},{"type":"function","name":"withdraw","stateMutability":"nonpayable","inputs":[],"outputs":[]},{"type":"function","name":"initializeRound","stateMutability":"nonpayable","inputs":[],"outputs":[]},{"type":"function","name":"owner","stateMutability":"view","inputs":[],"outputs":[{"name":"","type":"address","components":null,"internalType":null}]},{"type":"function","name":"currentRound","stateMutability":"view","inputs":[],"outputs":[{"name":"","type":"uint256","components":null,"internalType":null}]},{"type":"function","name":"minEntryFee","stateMutability":"view","inputs":[],"outputs":[{"name":"","type":"uint256","components":null,"internalType":null}]},{"type":"function","name":"rounds","stateMutability":"view","inputs":[{"name":"arg0","type":"uint256","components":null,"internalType":null}],"outputs":[{"name":"","type":"tuple","components":[{"name":"prompt","type":"string","components":null,"internalType":null},{"name":"startTime","type":"uint256","components":null,"internalType":null},{"name":"endTime","type":"uint256","components":null,"internalType":null},{"name":"active","type":"bool","components":null,"internalType":null},{"name":"entryFee","type":"uint256","components":null,"internalType":null}],"internalType":null}]},{"type":"function","name":"drawings","stateMutability":"view","inputs":[{"name":"arg0","type":"uint256","components":null,"internalType":null},{"name":"arg1","type":"address","components":null,"internalType":null}],"outputs":[{"name":"","type":"tuple","components":[{"name":"artist","type":"address","components":null,"internalType":null},{"name":"imageURL","type":"string","components":null,"internalType":null},{"name":"prompt","type":"string","components":null,"internalType":null},{"name":"totalScore","type":"uint256","components":null,"internalType":null},{"name":"voterCount","type":"uint256","components":null,"internalType":null},{"name":"exists","type":"bool","components":null,"internalType":null},{"name":"submissionTime","type":"uint256","components":null,"internalType":null}],"internalType":null}]},{"type":"function","name":"roundParticipants","stateMutability":"view","inputs":[{"name":"arg0","type":"uint256","components":null,"internalType":null},{"name":"arg1","type":"uint256","components":null,"internalType":null}],"outputs":[{"name":"","type":"address","components":null,"internalType":null}]},{"type":"function","name":"hasVoted","stateMutability":"view","inputs":[{"name":"arg0","type":"uint256","components":null,"internalType":null},{"name":"arg1","type":"address","components":null,"internalType":null},{"name":"arg2","type":"address","components":null,"internalType":null}],"outputs":[{"name":"","type":"bool","components":null,"internalType":null}]},{"type":"function","name":"promptCount","stateMutability":"view","inputs":[],"outputs":[{"name":"","type":"uint256","components":null,"internalType":null}]},{"type":"function","name":"prompts","stateMutability":"view","inputs":[{"name":"arg0","type":"uint256","components":null,"internalType":null}],"outputs":[{"name":"","type":"string","components":null,"internalType":null}]}];
 
 async function initContract() {
     signer = provider.getSigner();
@@ -52,12 +53,39 @@ async function updateUI() {
     try {
         const currentRound = await contract.currentRound();
         console.log("Current round:", currentRound.toString());
-        const roundInfo = await contract.getRoundInfo(currentRound);
-        const prompt = roundInfo[0];
-        const startTime = roundInfo[1].toNumber();
-        const endTime = roundInfo[2].toNumber();
-        const active = roundInfo[3];
-        const entryFee = ethers.utils.formatEther(roundInfo[4]);
+        
+        // Check if there's an active round
+        let roundInfo;
+        let prompt;
+        let startTime;
+        let endTime;
+        let active;
+        let entryFee;
+
+        try {
+            roundInfo = await contract.getRoundInfo(currentRound);
+            prompt = roundInfo[0];
+            startTime = roundInfo[1].toNumber();
+            endTime = roundInfo[2].toNumber();
+            active = roundInfo[3];
+            entryFee = ethers.utils.formatEther(roundInfo[4]);
+        } catch (error) {
+            // If no round exists or it's not active, try to initialize a round
+            try {
+                const tx = await contract.initializeRound();
+                await tx.wait();
+                // Fetch the round info again after initializing
+                roundInfo = await contract.getRoundInfo(currentRound + 1); // Round may have incremented
+                prompt = roundInfo[0];
+                startTime = roundInfo[1].toNumber();
+                endTime = roundInfo[2].toNumber();
+                active = roundInfo[3];
+                entryFee = ethers.utils.formatEther(roundInfo[4]);
+            } catch (initError) {
+                console.error("Error initializing round:", initError);
+                active = false;
+            }
+        }
 
         if (active) {
             document.getElementById('currentPrompt').textContent = `Current Prompt: ${prompt}`;
@@ -69,26 +97,44 @@ async function updateUI() {
             updateTimer(endTime);
             loadDrawings(currentRound);
         } else {
-            const dailyPrompt = await contract.getDailyPrompt();
-            document.getElementById('currentPrompt').textContent = `Today's Prompt: ${dailyPrompt}`;
+            try {
+                const dailyPrompt = await contract.getDailyPrompt();
+                document.getElementById('currentPrompt').textContent = `Today's Prompt: ${dailyPrompt}`;
+            } catch (e) {
+                document.getElementById('currentPrompt').textContent = `No prompts available`;
+            }
             document.getElementById('submissionSection').classList.add('hidden');
             document.getElementById('noActiveRound').classList.remove('hidden');
             document.getElementById('roundTimer').textContent = 'No active round';
         }
 
-        const drawing = await contract.drawings(currentRound, userAddress);
-        if (drawing.exists) {
-            document.getElementById('submissionSection').classList.add('hidden');
-            document.getElementById('alreadySubmitted').classList.remove('hidden');
-            document.getElementById('yourSubmission').src = drawing.imageURL;
-        }
+        // Try to get drawings for the current round
+        try {
+            const drawing = await contract.drawings(currentRound, userAddress);
+            if (drawing.exists) {
+                document.getElementById('submissionSection').classList.add('hidden');
+                document.getElementById('alreadySubmitted').classList.remove('hidden');
+                document.getElementById('yourSubmission').src = drawing.imageURL;
+            }
 
-        const participants = await contract.getDrawingsForRound(currentRound);
-        document.getElementById('totalSubmissions').textContent = participants.length;
-        document.getElementById('prizePool').textContent = ethers.utils.formatEther(roundInfo[4].mul(participants.length));
+            const participants = await contract.getDrawingsForRound(currentRound);
+            document.getElementById('totalSubmissions').textContent = participants.length;
+            
+            try {
+                const roundInfo = await contract.getRoundInfo(currentRound);
+                document.getElementById('prizePool').textContent = ethers.utils.formatEther(roundInfo[4].mul(participants.length));
+            } catch (e) {
+                document.getElementById('prizePool').textContent = "0";
+            }
+        } catch (error) {
+            document.getElementById('totalSubmissions').textContent = "0";
+            document.getElementById('prizePool').textContent = "0";
+        }
     } catch (error) {
         console.error('Error updating UI:', error);
-        document.getElementById('currentPrompt').textContent = `Error: ${error.message}`;
+        document.getElementById('currentPrompt').textContent = `No active round`;
+        document.getElementById('submissionSection').classList.add('hidden');
+        document.getElementById('noActiveRound').classList.remove('hidden');
     }
 }
 
@@ -109,42 +155,6 @@ function updateTimer(endTime) {
         }
     }, 1000);
 }
-
-document.getElementById('startNewRound').addEventListener('click', async () => {
-    const duration = document.getElementById('duration').value;
-    const entryFee = document.getElementById('entryFee').value;
-    if (!duration || !entryFee) {
-        showNotification('Error', 'Please fill all fields');
-        return;
-    }
-    try {
-        const tx = await contract.startNewRound(duration, ethers.utils.parseEther(entryFee));
-        await tx.wait();
-        showNotification('Success', 'New round started!');
-        updateUI();
-    } catch (error) {
-        showNotification('Error', 'Failed to start round: ' + error.message);
-    }
-});
-
-document.getElementById('endCurrentRound').addEventListener('click', async () => {
-    try {
-        const tx = await contract.endRound();
-        await tx.wait();
-        showNotification('Success', 'Round ended!');
-        updateUI();
-    } catch (error) {
-        showNotification('Error', 'Failed to end round: ' + error.message);
-    }
-});
-
-document.getElementById('adminControls').insertAdjacentHTML('beforeend', `
-    <div class="mt-4">
-        <h3 class="text-lg font-semibold mb-2">Manage Prompts</h3>
-        <input type="text" id="newPromptInput" placeholder="Enter new prompt" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 mb-2">
-        <button id="addPromptBtn" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition">Add Prompt</button>
-    </div>
-`);
 
 document.getElementById('addPromptBtn').addEventListener('click', async () => {
     const newPrompt = document.getElementById('newPromptInput').value;
